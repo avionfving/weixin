@@ -24,6 +24,10 @@ public class MessageReceiverController {
 			@RequestParam("echostr") String echostr//
 	) {
 		
+		
+		
+		
+		
 		// 正常来讲，需要把timestamp和nonce放入一个数组，并进行排序
 		// 接着把排序后的两个元素拼接成一个新的String
 		// 使用SHA-1算法对新的String进行加密
