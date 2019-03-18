@@ -9,5 +9,6 @@ public class WeixinApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WeixinApplication.class, args);
 	}
+	
 
 }
