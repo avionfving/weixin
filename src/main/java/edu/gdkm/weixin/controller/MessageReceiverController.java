@@ -15,26 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 //@RequestMapping表示的含义:URL跟控制器的关系映射
 @RequestMapping("/zdf/weixin/receiver")
 public class MessageReceiverController {
-	
-	@GetMapping // 只处理Get请求
-	public String echo( //
-			@RequestParam("signatrue") String signatrue,
-			@RequestParam("timestamp") String timestamp,
-			@RequestParam("nonce") String nonce,
-			@RequestParam("echostr") String echostr
-			){
-		
-		
-		
-		
-		//正常来讲，需要把timestamp和nonce放入一个数组，并进行排序
-		//接着把排序后的两个元素拼接成一个新的String
-		//使用SHA-1算法对新的String进行加密
-		//最后把加密的结果跟signatrue进行比较，如果相同表示验证通过，返回echostr
-		
-		
-		
-		// 原路返回echostrd的值，返回以后公众号平台就认为:服务器对接成功
+
+	@GetMapping // 只处理GET请求
+	public String echo(//
+			@RequestParam("signature") String signature, //
+			@RequestParam("timestamp") String timestamp, //
+			@RequestParam("nonce") String nonce, //
+			@RequestParam("echostr") String echostr//
+	) {
+		// 正常来讲，需要把timestamp和nonce放入一个数组，并进行排序
+		// 接着把排序后的两个元素拼接成一个新的String
+		// 使用SHA-1算法对新的String进行加密
+		// 最后把加密的结果跟signature进行比较，如果相同表示验证通过，返回echostr
+
+		// 原路返回echostr的值，返回以后微信公众号平台就能够认为：服务器对接成功
 		return echostr;
 	}
 }
+
