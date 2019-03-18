@@ -2,6 +2,7 @@ package edu.gdkm.weixin.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 //控制器：负责接收用户的请求参数，调用业务逻辑层代码，返回试图/结果给客户端（浏览器）
@@ -17,11 +18,13 @@ public class MessageReceiverController {
 	
 	@GetMapping // 只处理Get请求
 	public String echo( //
-			String signatrue,
-			String timestamp,
-			String nonce,
-			String echostr
+			@RequestParam("signatrue") String signatrue,
+			@RequestParam("timestamp") String timestamp,
+			@RequestParam("nonce") String nonce,
+			@RequestParam("echostr") String echostr
 			){
+		
+		System.out.println("Hello WeChat!");
 		
 		//正常来讲，需要把timestamp和nonce放入一个数组，并进行排序
 		//接着把排序后的两个元素拼接成一个新的String
