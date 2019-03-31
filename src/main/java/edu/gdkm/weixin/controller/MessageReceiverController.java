@@ -78,8 +78,7 @@ public class MessageReceiverController {
 		// 截取消息类型
 		// <MsgType><![CDATA[text]]></MsgType>
 		String type = xml.substring(xml.indexOf("<MsgType><![CDATA[") + 18);
-		type = xml.substring(0, type.indexOf("]]></MsgType>"));
-		
+		type = type.substring(0, type.indexOf("]]></MsgType>"));
 		
 		Class<InMessage> cla = MessageTypeMapper.getClass(type);
 		
