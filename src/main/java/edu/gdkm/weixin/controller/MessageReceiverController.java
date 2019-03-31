@@ -1,5 +1,7 @@
 package edu.gdkm.weixin.controller;
 
+import java.io.StringReader;
+
 import javax.xml.bind.JAXB;
 
 import org.slf4j.Logger;
@@ -76,14 +78,14 @@ public class MessageReceiverController {
 //		}
 		
 		// 截取消息类型
-		// <MsgType><![CDATA[text]]></MsgType>
-		String type = xml.substring(xml.indexOf("<MsgType><![CDATA[") + 18);
-		type = type.substring(0, type.indexOf("]]></MsgType>"));
-		
-		Class<InMessage> cla = MessageTypeMapper.getClass(type);
-		
-		// 使用JAXB完成XML转换为Java对象的操作
-		InMessage inMessage = JAXB.unmarshal(xml, cla);
+				// <MsgType><![CDATA[text]]></MsgType>
+				String type = xml.substring(xml.indexOf("<MsgType><![CDATA[") + 18);
+				type = type.substring(0, type.indexOf("]]></MsgType>"));
+
+				Class<InMessage> cla = MessageTypeMapper.getClass(type);
+
+				// 使用JAXB完成XML转换为Java对象的操作
+				InMessage inMessage = JAXB.unmarshal(new StringReader(xml), cla);
 		
 		LOG.debug("转换得到的消息对象 \n{}\n" , inMessage.toString());
 		
