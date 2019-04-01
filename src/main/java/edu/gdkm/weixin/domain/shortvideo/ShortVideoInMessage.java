@@ -48,5 +48,5 @@ public class ShortVideoInMessage extends InMessage {
 				+ getToUserName() + ", getFromUserName()=" + getFromUserName() + ", getCreateTime()=" + getCreateTime()
 				+ ", getMsgType()=" + getMsgType() + ", getMsgId()=" + getMsgId() + "]";
 	}
-	
+
 }

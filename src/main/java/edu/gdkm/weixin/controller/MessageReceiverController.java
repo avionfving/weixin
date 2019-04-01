@@ -78,16 +78,18 @@ public class MessageReceiverController {
 //		}
 		
 		// 截取消息类型
-				// <MsgType><![CDATA[text]]></MsgType>
-				String type = xml.substring(xml.indexOf("<MsgType><![CDATA[") + 18);
-				type = type.substring(0, type.indexOf("]]></MsgType>"));
+		// <MsgType><![CDATA[text]]></MsgType>
+		String type = xml.substring(xml.indexOf("<MsgType><![CDATA[") + 18);
+		type = type.substring(0, type.indexOf("]]></MsgType>"));
 
-				Class<InMessage> cla = MessageTypeMapper.getClass(type);
+		Class<InMessage> cla = MessageTypeMapper.getClass(type);
 
-				// 使用JAXB完成XML转换为Java对象的操作
-				InMessage inMessage = JAXB.unmarshal(new StringReader(xml), cla);
+		// 使用JAXB完成XML转换为Java对象的操作
+		InMessage inMessage = JAXB.unmarshal(new StringReader(xml), cla);
+
+		LOG.debug("转换得到的消息对象 \n{}\n", inMessage.toString());
 		
-		LOG.debug("转换得到的消息对象 \n{}\n" , inMessage.toString());
+		LOG.debug("转换得到的消息对象 \n{}\n", inMessage.toString());
 		
 		// 把消息丢入队列
 		// 消费队列中的消息

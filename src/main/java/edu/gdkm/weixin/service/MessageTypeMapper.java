@@ -28,9 +28,9 @@ public class MessageTypeMapper {
 	}
 	
 	// 通过消息类型获取对应的类
-	@SuppressWarnings("unchecked")
-	public static <T extends InMessage>Class<T> getClass(String type){
-		return (Class<T>) typeMap.get(type);
+		@SuppressWarnings("unchecked")
+		public static <T extends InMessage> Class<T> getClass(String type) {
+			return (Class<T>) typeMap.get(type);
 	}
 	
 }

@@ -77,6 +77,4 @@ public abstract class InMessage {
 		this.msgId = msgId;
 	}
 	
-	
-	
 }

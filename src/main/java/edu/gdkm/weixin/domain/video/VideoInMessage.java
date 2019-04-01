@@ -53,10 +53,12 @@ public class VideoInMessage extends InMessage {
 	}
 
 
+
 	@Override
 	public String toString() {
 		return "VideoInMessage [mediaId=" + mediaId + ", thumbMediaId=" + thumbMediaId + ", getToUserName()="
 				+ getToUserName() + ", getFromUserName()=" + getFromUserName() + ", getCreateTime()=" + getCreateTime()
 				+ ", getMsgType()=" + getMsgType() + ", getMsgId()=" + getMsgId() + "]";
 	}
+	
 }

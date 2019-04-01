@@ -54,4 +54,5 @@ public class VoiceInMessage extends InMessage {
 				+ ", getFromUserName()=" + getFromUserName() + ", getCreateTime()=" + getCreateTime()
 				+ ", getMsgType()=" + getMsgType() + ", getMsgId()=" + getMsgId() + "]";
 	}
+	
 }

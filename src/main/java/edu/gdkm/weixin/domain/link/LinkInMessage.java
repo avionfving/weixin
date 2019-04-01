@@ -55,11 +55,12 @@ public class LinkInMessage extends InMessage {
 		this.url = url;
 	}
 
+
 	@Override
 	public String toString() {
 		return "LinkInMessage [title=" + title + ", description=" + description + ", url=" + url + ", getToUserName()="
 				+ getToUserName() + ", getFromUserName()=" + getFromUserName() + ", getCreateTime()=" + getCreateTime()
 				+ ", getMsgType()=" + getMsgType() + ", getMsgId()=" + getMsgId() + "]";
 	}
-	
+
 }
