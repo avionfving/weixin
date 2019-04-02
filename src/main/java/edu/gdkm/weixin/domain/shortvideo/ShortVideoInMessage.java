@@ -13,6 +13,11 @@ import edu.gdkm.weixin.domain.InMessage;
 @XmlRootElement(name="xml") // JAXB读取XML时根元素名称
 public class ShortVideoInMessage extends InMessage {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@XmlElement(name="MediaId")
 	@JsonProperty("MediaId")
 	private String mediaId;

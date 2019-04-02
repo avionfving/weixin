@@ -1,17 +1,29 @@
 package edu.gdkm.weixin.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.StringReader;
 
 import javax.xml.bind.JAXB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.log.LogDelegateFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import edu.gdkm.weixin.domain.InMessage;
 import edu.gdkm.weixin.service.MessageTypeMapper;
@@ -28,6 +40,10 @@ public class MessageReceiverController {
 	
 	// 日志记录器
 	private static final Logger LOG = LoggerFactory.getLogger(MessageReceiverController.class);
+	
+	@Autowired
+	@Qualifier("inMessageTemplate")
+	private RedisTemplate<String, InMessage> inMessageTemplate;
 	
 	// 注意：控制器里面必须要有处理器方法（Handle、Method）才能执行操作，才不会404.
 	// 处理GET请求，HTTP协议支持GET、POST、PUT、DELETE等请求方式，都有对应的注解。
@@ -87,6 +103,34 @@ public class MessageReceiverController {
 		LOG.debug("转换得到的消息对象  \n {} \n", inMessage.toString());
 		
 		// 把消息丢入队列
+		inMessageTemplate.execute(new RedisCallback<String>() {
+
+			// connection对象表示跟Redis数据库的连接
+			@Override
+			public String doInRedis(RedisConnection connection) throws DataAccessException {
+				// TODO Auto-generated method stub
+				try {
+				// 发布消息的时候，需要准备两个byte[]
+				// 一个作为通道名称来使用，类似于无线电广播，不同的频道声音是隔离的，通道名称是Redis用来隔离不同的数据的。
+				// 比如文本消息、图片消息处理方式不同，所以使用前缀来隔离:text* 表示文本消息、image表示图片消息。
+				// 数据库实例0-15，建议在通道名称之前加上反向代理的前缀。
+				String channel = "zdf_" + inMessage.getMsgType();
+				
+				// 消息内容要自己序列化才能放入队列中
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				ObjectOutputStream oot = new ObjectOutputStream(out);
+				oot.writeObject(inMessage);
+				
+				Long l = connection.publish(channel.getBytes(), out.toByteArray());
+				System.out.println("发布结果：" + l);
+				}catch(Exception e) {
+					LOG.error("把消息放入队列时出现问题：" + e.getLocalizedMessage(), e);
+				}
+				return null;
+			}
+		});
+		
+		
 		// 消费队列中的消息
 		// 产生客服消息
 		return "success";

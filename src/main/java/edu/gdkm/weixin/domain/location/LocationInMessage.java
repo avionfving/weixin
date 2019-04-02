@@ -13,6 +13,11 @@ import edu.gdkm.weixin.domain.InMessage;
 @XmlRootElement(name="xml") // JAXB读取XML时根元素名称
 public class LocationInMessage extends InMessage {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@XmlElement(name="Location_X")
 	@JsonProperty("Location_X")
 	private String location_X;
