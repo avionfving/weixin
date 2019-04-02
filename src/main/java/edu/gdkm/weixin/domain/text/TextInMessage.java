@@ -13,8 +13,8 @@ import edu.gdkm.weixin.domain.InMessage;
 @XmlRootElement(name="xml") // JAXB读取XML时根元素名称
 public class TextInMessage extends InMessage {
 
-	@XmlElement(name="content")
-	@JsonProperty("content")
+	@XmlElement(name="Content")
+	@JsonProperty("Content")
 	private String content;
 	
 	public TextInMessage() {
@@ -37,5 +37,4 @@ public class TextInMessage extends InMessage {
 				+ getFromUserName() + ", getCreateTime()=" + getCreateTime() + ", getMsgType()=" + getMsgType()
 				+ ", getMsgId()=" + getMsgId() + "]";
 	}
-	
 }
