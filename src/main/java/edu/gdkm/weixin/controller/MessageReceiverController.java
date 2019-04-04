@@ -96,39 +96,47 @@ public class MessageReceiverController {
 		// 截取消息类型
 		// <MsgType><![CDATA[text]]></MsgType>
 		String type = xml.substring(xml.indexOf("<MsgType><![CDATA[") + 18);
+		
 		type = type.substring(0, type.indexOf("]]></MsgType>"));
+		
 		Class<InMessage> cla = MessageTypeMapper.getClass(type);
+		
 		// 使用JAXB完成XML转换为Java对象的操作
 		InMessage inMessage = JAXB.unmarshal(new StringReader(xml), cla);
 		LOG.debug("转换得到的消息对象  \n {} \n", inMessage.toString());
 		
+		
+//		String channel = "zdf_" + inMessage.getMsgType();
+		
+		inMessageTemplate.convertAndSend("zdf_" + inMessage.getMsgType(), inMessage);
+		
 		// 把消息丢入队列
-		inMessageTemplate.execute(new RedisCallback<String>() {
-
-			// connection对象表示跟Redis数据库的连接
-			@Override
-			public String doInRedis(RedisConnection connection) throws DataAccessException {
-				// TODO Auto-generated method stub
-				try {
-				// 发布消息的时候，需要准备两个byte[]
-				// 一个作为通道名称来使用，类似于无线电广播，不同的频道声音是隔离的，通道名称是Redis用来隔离不同的数据的。
-				// 比如文本消息、图片消息处理方式不同，所以使用前缀来隔离:text* 表示文本消息、image表示图片消息。
-				// 数据库实例0-15，建议在通道名称之前加上反向代理的前缀。
-				String channel = "zdf_" + inMessage.getMsgType();
-				
-				// 消息内容要自己序列化才能放入队列中
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				ObjectOutputStream oot = new ObjectOutputStream(out);
-				oot.writeObject(inMessage);
-				
-				Long l = connection.publish(channel.getBytes(), out.toByteArray());
-				System.out.println("发布结果：" + l);
-				}catch(Exception e) {
-					LOG.error("把消息放入队列时出现问题：" + e.getLocalizedMessage(), e);
-				}
-				return null;
-			}
-		});
+//		inMessageTemplate.execute(new RedisCallback<String>() {
+//
+//			// connection对象表示跟Redis数据库的连接
+//			@Override
+//			public String doInRedis(RedisConnection connection) throws DataAccessException {
+//				// TODO Auto-generated method stub
+//				try {
+//				// 发布消息的时候，需要准备两个byte[]
+//				// 一个作为通道名称来使用，类似于无线电广播，不同的频道声音是隔离的，通道名称是Redis用来隔离不同的数据的。
+//				// 比如文本消息、图片消息处理方式不同，所以使用前缀来隔离:text* 表示文本消息、image表示图片消息。
+//				// 数据库实例0-15，建议在通道名称之前加上反向代理的前缀。
+//				String channel = "zdf_" + inMessage.getMsgType();
+//				
+//				// 消息内容要自己序列化才能放入队列中
+//				ByteArrayOutputStream out = new ByteArrayOutputStream();
+//				ObjectOutputStream oot = new ObjectOutputStream(out);
+//				oot.writeObject(inMessage);
+//				
+//				Long l = connection.publish(channel.getBytes(), out.toByteArray());
+//				System.out.println("发布结果：" + l);
+//				}catch(Exception e) {
+//					LOG.error("把消息放入队列时出现问题：" + e.getLocalizedMessage(), e);
+//				}
+//				return null;
+//			}
+//		});
 		
 		
 		// 消费队列中的消息
