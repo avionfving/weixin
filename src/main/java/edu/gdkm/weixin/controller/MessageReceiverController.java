@@ -79,24 +79,17 @@ public class MessageReceiverController {
 		
 		// 转换消息
 //		if(xml.contains("<MsgType><![CDATA[text]]></MsgType>")) {
-//			
 //		}else if (xml.contains("<MsgType><![CDATA[image]]></MsgType>")) {
-//			
 //		}else if (xml.contains("<MsgType><![CDATA[voice]]></MsgType>")) {
-//			
 //		}else if (xml.contains("<MsgType><![CDATA[video]]></MsgType>")) {
-//			
 //		}else if (xml.contains("<MsgType><![CDATA[shortvideo]]></MsgType>")) {
-//			
-//		}else if (xml.contains("<MsgType><![CDATA[location]]></MsgType>")) {
-//			
+//		}else if (xml.contains("<MsgType><![CDATA[location]]></MsgType>")) {	
 //		}else if (xml.contains("<MsgType><![CDATA[link]]></MsgType>")) {
 //		}
 		
 		// 截取消息类型
 		// <MsgType><![CDATA[text]]></MsgType>
 		String type = xml.substring(xml.indexOf("<MsgType><![CDATA[") + 18);
-		
 		type = type.substring(0, type.indexOf("]]></MsgType>"));
 		
 		Class<InMessage> cla = MessageTypeMapper.getClass(type);
@@ -105,9 +98,7 @@ public class MessageReceiverController {
 		InMessage inMessage = JAXB.unmarshal(new StringReader(xml), cla);
 		LOG.debug("转换得到的消息对象  \n {} \n", inMessage.toString());
 		
-		
 //		String channel = "zdf_" + inMessage.getMsgType();
-		
 		inMessageTemplate.convertAndSend("zdf_" + inMessage.getMsgType(), inMessage);
 		
 		// 把消息丢入队列
