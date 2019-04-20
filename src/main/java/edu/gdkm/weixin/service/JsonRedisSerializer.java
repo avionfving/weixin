@@ -52,7 +52,7 @@ public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<Object> {
 	
 	// 在反序话的时候被调用的方法，负责字节数组转换为InMessage
 	@Override
-	public Object deserialize(byte[] bytes) throws SerializationException {
+	public InMessage deserialize(byte[] bytes) throws SerializationException {
 		
 		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
 		DataInputStream in = new DataInputStream(bais);
